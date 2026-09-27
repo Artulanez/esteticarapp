@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="EsteticarApp logo">
+  <defs>
+    <linearGradient id="shieldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#89a4b8"/>
+      <stop offset="22%" stop-color="#edf2f7"/>
+      <stop offset="52%" stop-color="#4c647a"/>
+      <stop offset="72%" stop-color="#f9fbff"/>
+      <stop offset="100%" stop-color="#2d3a49"/>
+    </linearGradient>
+    <linearGradient id="shieldBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0b1524"/>
+      <stop offset="100%" stop-color="#0c4c85" stop-opacity="0.32"/>
+    </linearGradient>
+    <linearGradient id="carBody" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0a8ad1"/>
+      <stop offset="35%" stop-color="#3cc2ff"/>
+      <stop offset="70%" stop-color="#0d8fdc"/>
+      <stop offset="100%" stop-color="#005d9f"/>
+    </linearGradient>
+    <linearGradient id="silver" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="45%" stop-color="#d8e1ec"/>
+      <stop offset="100%" stop-color="#6b7f95"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0f2438"/>
+      <stop offset="100%" stop-color="#1d2d3d"/>
+    </linearGradient>
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+    <filter id="softGlow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g transform="translate(0 2)" filter="url(#dropShadow)">
+    <path d="M128 22 C160 22 189 31 206 46 C206 86 201 126 128 180 C55 126 50 86 50 46 C67 31 96 22 128 22 Z" fill="none" stroke="url(#shieldBorder)" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M128 30 C156 30 181 38 196 51 C196 89 191 120 128 168 C65 120 60 89 60 51 C75 38 100 30 128 30 Z" fill="url(#shieldBg)"/>
+    <path d="M128 41 C152 41 175 48 188 60 C188 90 184 116 128 153 C72 116 68 90 68 60 C81 48 104 41 128 41 Z" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.74"/>
+
+    <path d="M60 120 C76 84 103 62 149 58 C182 56 198 74 201 90 C214 99 216 109 204 118 C191 129 171 133 154 128 C134 122 119 120 94 122 C82 123 68 124 60 120 Z" fill="none" stroke="url(#silver)" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
+    <path d="M58 118 C77 90 105 74 150 70 C180 68 196 80 202 93" fill="none" stroke="#3ec0ff" stroke-width="4" stroke-linecap="round" filter="url(#softGlow)"/>
+
+    <g transform="translate(26,18)">
+      <path d="M42 118 C55 98 76 89 103 86 C127 84 146 94 165 105 C154 113 142 117 121 118 C94 119 70 118 42 118 Z" fill="url(#glass)" opacity="0.9"/>
+      <path d="M44 119 C58 105 79 97 103 96 C124 95 148 101 170 112 C160 118 142 124 120 123 C92 123 69 122 44 119 Z" fill="url(#silver)" opacity="0.82"/>
+
+      <path d="M32 128 C46 111 61 100 90 95 C118 90 152 93 180 108 C192 114 202 123 198 132 C189 146 171 153 149 152 C131 151 111 145 94 145 C65 145 47 146 32 128 Z" fill="url(#carBody)"/>
+
+      <path d="M82 117 C102 106 123 104 152 107 C159 110 167 113 176 116 C164 122 149 126 127 127 C109 128 94 124 82 117 Z" fill="url(#silver)" opacity="0.75"/>
+
+      <path d="M68 135 C89 127 117 127 151 130" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.85"/>
+      <path d="M67 133 C94 126 132 127 168 136" fill="none" stroke="#c6eaff" stroke-width="1.6" stroke-linecap="round" opacity="0.7"/>
+
+      <g transform="translate(68 152)">
+        <circle cx="0" cy="0" r="15" fill="#0e1727" stroke="url(#silver)" stroke-width="4"/>
+        <circle cx="0" cy="0" r="9" fill="#1a2d3b" stroke="#3ec0ff" stroke-width="2"/>
+        <circle cx="0" cy="0" r="3" fill="#ffffff"/>
+      </g>
+      <g transform="translate(164 152)">
+        <circle cx="0" cy="0" r="15" fill="#0e1727" stroke="url(#silver)" stroke-width="4"/>
+        <circle cx="0" cy="0" r="9" fill="#1a2d3b" stroke="#3ec0ff" stroke-width="2"/>
+        <circle cx="0" cy="0" r="3" fill="#ffffff"/>
+      </g>
+    </g>
+
+    <g fill="#ffffff" opacity="0.95">
+      <path d="M101 60 L103 67 L110 69 L103 71 L101 78 L99 71 L92 69 L99 67 Z"/>
+      <path d="M181 87 L183 93 L189 95 L183 97 L181 103 L179 97 L173 95 L179 93 Z"/>
+      <path d="M206 123 L208 129 L214 131 L208 133 L206 139 L204 133 L198 131 L204 129 Z"/>
+    </g>
+  </g>
+</svg>

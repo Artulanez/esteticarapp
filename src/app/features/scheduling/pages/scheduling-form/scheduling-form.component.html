@@ -1,0 +1,210 @@
+<section class="scheduling-form">
+  <div class="brand-block">
+    <img src="/logo.svg" alt="Logo da empresa" class="brand-logo" />
+    <span class="brand-name">EsteticarApp</span>
+  </div>
+
+  <div class="card agenda-card">
+    <div class="header-row">
+      <div>
+        <p class="eyebrow">Agenda</p>
+        <h2>{{ editingId !== null ? 'Editar agendamento' : 'Novo agendamento' }}</h2>
+      </div>
+      <button type="button" class="secondary header-btn" (click)="goToHome()">Voltar</button>
+    </div>
+
+    <div class="summary-grid">
+      <div class="summary-chip">
+        <span>Cliente</span>
+        <strong>{{ selectedCustomerName }}</strong>
+      </div>
+      <div class="summary-chip">
+        <span>Data</span>
+        <strong>{{ form.get('date')?.value || '—' }}</strong>
+      </div>
+      <div class="summary-chip">
+        <span>Serviços</span>
+        <strong>{{ selectedServices.length }}</strong>
+      </div>
+      <div class="summary-chip highlight">
+        <span>Total</span>
+        <strong>R$ {{ (form.get('scheduledValue')?.value || 0) | number: '1.2-2' }}</strong>
+      </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="field-row three-columns">
+        <div class="field">
+          <label for="date">Data</label>
+          <input id="date" type="date" formControlName="date" />
+        </div>
+
+        <div class="field">
+          <label for="time">Horário</label>
+          <input id="time" type="time" formControlName="time" />
+        </div>
+
+        <div class="field">
+          <label for="status">Situação</label>
+          <select id="status" formControlName="status">
+            <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="customerId">Cliente</label>
+        <select id="customerId" formControlName="customerId">
+          <option value="">Selecione um cliente</option>
+          <option *ngFor="let customer of customers" [value]="customer.id">{{ customer.name }}</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Serviços</label>
+        <div class="inline-selector service-selector">
+          <select [(ngModel)]="selectedServiceId" [ngModelOptions]="{ standalone: true }">
+            <option value="">Selecione um serviço</option>
+            <option *ngFor="let service of serviceOptions" [value]="service.id">
+              {{ service.name }}
+            </option>
+          </select>
+          <button type="button" class="secondary" (click)="addServiceToSchedule(+selectedServiceId)">Adicionar</button>
+        </div>
+
+        <div class="selected-list" *ngIf="selectedServices.length; else emptyServiceList">
+          <div class="service-table-header">
+            <span>Serviço</span>
+            <span>Valor</span>
+            <span>Ação</span>
+          </div>
+
+          <div class="selected-item" *ngFor="let service of selectedServices">
+            <span>{{ service.name }}</span>
+            <small>R$ {{ service.totalValue | number: '1.2-2' }}</small>
+            <button type="button" class="danger small" (click)="removeServiceFromSchedule(service.id ?? 0)">Remover</button>
+          </div>
+        </div>
+
+        <ng-template #emptyServiceList>
+          <p class="empty-message">Nenhum serviço selecionado.</p>
+        </ng-template>
+      </div>
+
+      <div class="field-row two-columns">
+        <div class="field">
+          <label for="serviceValue">Valor dos serviços</label>
+          <input id="serviceValue" type="number" min="0" step="0.01" formControlName="serviceValue" readonly />
+        </div>
+
+        <div class="field">
+          <label for="discountPercent">Percentual de desconto</label>
+          <input id="discountPercent" type="number" min="0" max="100" step="0.01" formControlName="discountPercent" />
+        </div>
+      </div>
+
+      <div class="field-row two-columns">
+        <div class="field">
+          <label for="scheduledValue">Valor do agendamento</label>
+          <input id="scheduledValue" type="number" min="0" step="0.01" formControlName="scheduledValue" />
+        </div>
+
+        <div class="field">
+          <label for="customerName">Cliente selecionado</label>
+          <input id="customerName" type="text" [value]="selectedCustomerName" readonly />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="observation">Observação</label>
+        <textarea id="observation" rows="3" formControlName="observation" placeholder="Digite uma observação"></textarea>
+      </div>
+
+      <div class="checkin-block" formGroupName="checkIn">
+        <div class="checkin-header">
+          <label>Check-in do veículo</label>
+          <button type="button" class="secondary small" (click)="completeVehicleCheckIn()" [disabled]="form.invalid || !selectedServices.length">
+            Concluir check-in
+          </button>
+        </div>
+
+        <div class="field">
+          <label for="checkInNotes">Anotações do atendimento</label>
+          <textarea id="checkInNotes" rows="3" formControlName="notes" placeholder="Descreva o que foi observado no recebimento, como arranhões, manchas, riscos e demais detalhes do veículo."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="vehicleObservation">Observações do carro</label>
+          <textarea id="vehicleObservation" rows="3" formControlName="vehicleObservation" placeholder="Ex.: arranhão na porta do motorista, marca na lateral, pintura com leve desgaste..."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="checkInPhotos">Fotos do veículo</label>
+          <input id="checkInPhotos" type="file" accept="image/*" multiple (change)="onCheckInPhotosSelected($event)" />
+        </div>
+
+        <div class="checkin-preview" *ngIf="checkInPhotoPreviews.length">
+          <div class="photo-tile" *ngFor="let photo of checkInPhotoPreviews; let i = index">
+            <img [src]="photo" alt="Foto do check-in do veículo" />
+            <button type="button" class="danger small" (click)="removeCheckInPhoto(i)">Remover</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button type="submit" [disabled]="form.invalid || !selectedServices.length">
+          {{ editingId !== null ? 'Atualizar agendamento' : 'Salvar agendamento' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="list-panel" *ngIf="schedulingList.length">
+    <div class="toolbar agenda-toolbar">
+      <h3>Próximos agendamentos</h3>
+      <span class="agenda-count">{{ schedulingList.length }} registros</span>
+    </div>
+
+    <ul class="agenda-list">
+      <li *ngFor="let schedule of schedulingList" class="agenda-item">
+        <div class="agenda-date-box">
+          <span>{{ schedule.date | date: 'dd' }}</span>
+          <small>{{ schedule.date | date: 'MMM' }}</small>
+        </div>
+
+        <div class="agenda-main">
+          <div class="agenda-topline">
+            <strong>{{ schedule.customerName }}</strong>
+            <span class="status-pill" [ngClass]="schedule.status.toLowerCase().replace(' ', '-')">{{ schedule.status }}</span>
+          </div>
+          <span class="agenda-meta">{{ schedule.services.length }} serviço(s) · Valor: R$ {{ schedule.scheduledValue | number: '1.2-2' }}</span>
+          <span class="agenda-meta subtle">{{ schedule.observation || 'Sem observações adicionais.' }}</span>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="secondary" (click)="editSchedule(schedule)">Editar</button>
+
+          <button
+            *ngIf="canSendReminder(schedule)"
+            type="button"
+            class="whatsapp-btn compact"
+            (click)="sendReminderMessage(schedule)"
+          >
+            Lembrete WhatsApp
+          </button>
+
+          <button
+            *ngIf="canSendFeedback(schedule)"
+            type="button"
+            class="whatsapp-btn compact"
+            (click)="sendFeedbackMessage(schedule)"
+          >
+            Solicitar feedback
+          </button>
+
+          <button type="button" class="danger" (click)="deleteSchedule(schedule.id)">Excluir</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,115 @@
+<section class="customer-form">
+  <div class="brand-block">
+    <img src="/logo.svg" alt="Logo da empresa" class="brand-logo" />
+    <span class="brand-name">EsteticarApp</span>
+  </div>
+
+  <div class="card">
+    <div class="header-row">
+      <h2>{{ editingId !== null ? 'Editar cliente' : 'Cadastrar cliente' }}</h2>
+
+      <div class="header-actions">
+        <button type="button" class="secondary header-btn" (click)="goToHome()">Voltar</button>
+        <label class="switch" aria-label="Alternar persistência">
+          <input type="checkbox" [checked]="isApiMode" (change)="togglePersistenceMode()" />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="mode-label">
+      <strong>Persistência:</strong>
+      {{ isApiMode ? 'API - hostesteticarapp' : 'LocalStorage' }}
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="field">
+        <label for="name">Nome</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="Digite o nome completo"
+        />
+
+        <small *ngIf="form.get('name')?.touched && form.get('name')?.hasError('required')">
+          Nome é obrigatório.
+        </small>
+        <small *ngIf="form.get('name')?.touched && form.get('name')?.hasError('minlength')">
+          Nome deve ter ao menos 2 caracteres.
+        </small>
+      </div>
+
+      <div class="field">
+        <label for="phone">Telefone / WhatsApp</label>
+        <input
+          id="phone"
+          type="tel"
+          formControlName="phone"
+          placeholder="(11) 99999-9999"
+        />
+
+        <small *ngIf="form.get('phone')?.touched && form.get('phone')?.hasError('required')">
+          Telefone/WhatsApp é obrigatório.
+        </small>
+        <small *ngIf="form.get('phone')?.touched && form.get('phone')?.hasError('pattern')">
+          Informe um número válido.
+        </small>
+      </div>
+
+      <button type="submit" [disabled]="form.invalid">
+        {{ editingId !== null ? 'Atualizar cliente' : 'Salvar cliente' }}
+      </button>
+    </form>
+  </div>
+
+  <div class="list-panel" *ngIf="filteredCustomers.length">
+    <div class="toolbar">
+      <h3>Clientes cadastrados</h3>
+
+      <div class="search-row">
+        <input
+          type="text"
+          class="search-input"
+          [(ngModel)]="searchTerm"
+          placeholder="Consultar por nome"
+          aria-label="Consultar por nome"
+        />
+        <button type="button" class="secondary search-button" (click)="onSearch()">Pesquisar</button>
+      </div>
+    </div>
+
+    <div class="pagination-controls top">
+      <label>
+        Registros por página:
+        <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+          <option *ngFor="let option of pageOptions" [value]="option">{{ option }}</option>
+        </select>
+      </label>
+    </div>
+
+    <ul>
+      <li *ngFor="let customer of paginatedCustomers">
+        <div>
+          <strong>{{ customer.name }}</strong>
+          <span>{{ customer.phone }}</span>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="secondary" (click)="editCustomer(customer)">Editar</button>
+          <button type="button" class="danger" (click)="deleteCustomer(customer.id)">Excluir</button>
+        </div>
+      </li>
+    </ul>
+
+    <div class="pagination-controls">
+      <button type="button" (click)="previousPage()" [disabled]="page === 1">Anterior</button>
+      <span>Página {{ page }} de {{ totalPages }}</span>
+      <button type="button" (click)="nextPage()" [disabled]="page >= totalPages">Próxima</button>
+    </div>
+  </div>
+
+  <div class="list-panel empty" *ngIf="!filteredCustomers.length">
+    <h3>Nenhum cliente cadastrado</h3>
+  </div>
+</section>

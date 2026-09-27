@@ -1,0 +1,154 @@
+<section class="customer-form">
+  <div class="brand-block">
+    <img src="/logo.svg" alt="Logo da empresa" class="brand-logo" />
+    <span class="brand-name">EsteticarApp</span>
+  </div>
+
+  <div class="card">
+    <div class="header-row">
+      <h2>{{ editingId !== null ? 'Editar serviço' : 'Cadastrar serviço' }}</h2>
+      <button type="button" class="secondary header-btn" (click)="goToHome()">Voltar</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="field">
+        <label for="serviceName">Nome do serviço</label>
+        <input id="serviceName" type="text" formControlName="name" placeholder="Ex: Revestimento automotivo" />
+        <small *ngIf="form.get('name')?.touched && form.get('name')?.hasError('required')">
+          Nome é obrigatório.
+        </small>
+      </div>
+
+      <div class="field">
+        <label for="productSelect">Adicionar produto utilizado</label>
+        <div class="inline-form">
+          <select id="productSelect" [(ngModel)]="selectedProductId" [ngModelOptions]="{standalone: true}">
+            <option value="">Selecione um produto</option>
+            <option *ngFor="let product of availableProducts" [value]="product.id">
+              {{ product.name }} - {{ product.brand }} - R$ {{ product.pricePerLiter | number: '1.2-2' }}/L
+            </option>
+          </select>
+
+          <input
+            type="number"
+            min="1"
+            step="1"
+            placeholder="ml"
+            [(ngModel)]="quantityMl"
+            [ngModelOptions]="{standalone: true}"
+          />
+
+          <button type="button" class="secondary" (click)="addProductToService()">Adicionar</button>
+        </div>
+      </div>
+
+      <div class="field" *ngIf="currentItems.length">
+        <div class="list-toggle-row">
+          <label>Produtos adicionados</label>
+          <button type="button" class="accordion-toggle" (click)="toggleProductsList()">
+            <span>{{ isProductsListVisible ? 'Esconder lista' : 'Ver lista' }}</span>
+            <span class="chevron" [class.expanded]="isProductsListVisible">▾</span>
+          </button>
+        </div>
+
+        <div class="usage-table-wrapper" *ngIf="isProductsListVisible">
+          <table class="usage-table">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>ML</th>
+                <th>Valor sugerido</th>
+                <th>Valor cobrado</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of currentItems">
+                <td>
+                  <div class="product-cell">
+                    <strong>{{ item.productName }}</strong>
+                    <span>R$ {{ item.unitValue | number: '1.2-2' }} / litro</span>
+                  </div>
+                </td>
+                <td>{{ item.quantityMl }} ml</td>
+                <td>R$ {{ item.productValue | number: '1.2-2' }}</td>
+                <td>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    class="charged-input"
+                    [ngModel]="item.chargedValue ?? item.productValue"
+                    [ngModelOptions]="{ standalone: true }"
+                    (ngModelChange)="updateItemCharge(item.productId, $event)"
+                  />
+                </td>
+                <td>
+                  <button type="button" class="danger small-btn" (click)="removeProduct(item)">Remover</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="operationalValue">Valor operacional (opcional)</label>
+        <input id="operationalValue" type="number" min="0" step="0.01" formControlName="operationalValue" placeholder="0.00" />
+      </div>
+
+      <div class="totals-box">
+        <div>
+          <span>Valor dos produtos</span>
+          <strong>R$ {{ totalProductValue | number: '1.2-2' }}</strong>
+        </div>
+        <div>
+          <span>Valor operacional</span>
+          <strong>R$ {{ form.get('operationalValue')?.value | number: '1.2-2' }}</strong>
+        </div>
+        <div class="final-total">
+          <span>Valor sugerido</span>
+          <strong>R$ {{ totalSuggestedValue | number: '1.2-2' }}</strong>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="chargeValue">Valor a ser cobrado</label>
+        <input
+          id="chargeValue"
+          type="number"
+          min="0"
+          step="0.01"
+          formControlName="chargeValue"
+          (input)="onChargeValueInput($any($event.target).value)"
+          placeholder="0.00"
+        />
+      </div>
+
+      <button type="submit" [disabled]="form.invalid || !currentItems.length">
+        {{ editingId !== null ? 'Atualizar serviço' : 'Salvar serviço' }}
+      </button>
+    </form>
+  </div>
+
+  <div class="list-panel" *ngIf="services.length">
+    <div class="toolbar">
+      <h3>Serviços cadastrados</h3>
+    </div>
+
+    <ul>
+      <li *ngFor="let service of services">
+        <div>
+          <strong>{{ service.name }}</strong>
+          <span>{{ service.items.length }} produtos</span>
+          <span>Valor cobrado: R$ {{ service.totalValue | number: '1.2-2' }}</span>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="secondary" (click)="editService(service)">Editar</button>
+          <button type="button" class="danger" (click)="deleteService(service.id)">Excluir</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>

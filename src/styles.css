@@ -1,1 +1,39 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --brand-blue-900: #0d3d73;
+  --brand-blue-700: #1758a8;
+  --brand-blue-500: #2f6fd4;
+  --brand-silver-700: #7d90a5;
+  --brand-silver-500: #b9c7d8;
+  --brand-silver-300: #e7edf6;
+  --brand-white: #ffffff;
+  --bg-soft: #f4f8fc;
+  --bg-page: linear-gradient(135deg, #edf5ff 0%, #f8fbff 36%, #e7edf7 100%);
+  --card-bg: rgba(255, 255, 255, 0.88);
+  --text-primary: #14233b;
+  --text-secondary: #4f6078;
+  --border-soft: rgba(17, 88, 164, 0.12);
+  --shadow-soft: 0 22px 45px rgba(17, 88, 164, 0.12);
+  --button-gradient: linear-gradient(135deg, var(--brand-blue-900) 0%, var(--brand-blue-700) 42%, var(--brand-silver-500) 100%);
+  --button-hover: linear-gradient(135deg, #0a2e5b 0%, #124d9d 40%, #93a8bf 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg-page);
+  color: var(--text-primary);
+}
+
+body {
+  min-height: 100vh;
+}
+
+button, input {
+  font: inherit;
+}
+
